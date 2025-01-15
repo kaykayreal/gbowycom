@@ -1,66 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Gbowy Backend Server
+This repository contains the backend server for the Gbowy platform, built using Laravel, a popular PHP framework. It handles user management, API integrations, transactions, and various other services required by the Gbowy platform.
+Table of Contents
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Prerequisites
+2. Installation
+3. Configuration
+4. Running the Development Server
+5. Testing
+6. Deployment
+7. API Documentation
+   Prerequisites
+   Ensure you have the following installed on your local machine:
+   • PHP 8.2 or higher
+   • Composer (for managing PHP dependencies)
+   • MySQL (or a compatible database)
+   • Laravel 10.x (this project is built using Laravel)
+   • Node.js (for managing frontend assets, if applicable)
+   Installing PHP, Composer, MySQL, and Laravel
+   • Install PHP.
+   • Install Composer.
+   • Install MySQL or use a database like MariaDB.
+   • Install Laravel via Composer:
+   bash
+   Copy code
+   composer global require laravel/installer
+   Installation
+8. Clone the Repository
+   Clone the repository to your local machine:
+   bash
+   Copy code
+   git clone https://github.com/kaykayreal/gbowy-backend.git
+9. Install PHP Dependencies
+   Navigate to the project directory and install the required dependencies using Composer:
+   bash
+   Copy code
+   cd gbowy-backend
+   composer install
+10. Install Frontend Dependencies (Optional)
+    If the backend has any assets, you may also need to install the frontend dependencies:
+    bash
+    Copy code
+    npm install
+    OR
+    bash
+    Copy code
+    yarn install
+    Configuration
+11. Create Environment File
+    In the project root directory, create a .env file by copying the .env.example file:
+    bash
+    Copy code
+    cp .env.example .env
+12. Set Database Credentials
+    Open the .env file and configure your database settings. For example:
+    makefile
+    Copy code
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=gbowy_database
+    DB_USERNAME=root
+    DB_PASSWORD=
+13. Generate Application Key
+    Laravel requires an application key, which you can generate by running:
+    bash
+    Copy code
+    php artisan key:generate
+14. Set Up Other Configurations
+    You may also need to configure other services like Mail, SMS, Stripe, Paystack, or other integrations by modifying the respective values in the .env file.
+    Running the Development Server
+15. Start the Laravel Development Server
+    Run the following command to start the development server:
+    bash
+    Copy code
+    php artisan serve
+    By default, the server will be accessible at http://localhost:8000.
+16. Frontend Assets (Optional)
+    If you have frontend assets that need to be compiled (e.g., for Vue.js or React), run the following command:
+    bash
+    Copy code
+    npm run dev
+    OR
+    bash
+    Copy code
+    yarn dev
+    Testing
+    You can run the tests to ensure everything is working correctly.
+17. Run PHPUnit Tests
+    To run unit tests:
+    bash
+    Copy code
+    php artisan test
+18. Run Dusk Tests (for browser automation testing)
+    bash
+    Copy code
+    php artisan dusk
+    Deployment
+19. Prepare for Deployment
+    Ensure that you have a production environment .env file, configure the appropriate database, mail, and API keys for your production setup.
+20. Deploying to Server
+    You can deploy to a server using tools like Forge, Envoyer, Git, or manually. To deploy manually:
+    • Pull the latest changes:
+    bash
+    Copy code
+    git pull origin main
+    • Install dependencies:
+    bash
+    Copy code
+    composer install --optimize-autoloader --no-dev
+    npm install --production
+    • Run migrations:
+    bash
+    Copy code
+    php artisan migrate --force
+    • Clear cache and config:
+    bash
+    Copy code
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+    API Documentation
+    You can document the API routes by either using tools like Swagger or Postman. Below are some of the essential API routes (this section should be customized based on your routes):
+    • GET /api/users - Retrieve a list of users.
+    • POST /api/users - Create a new user.
+    • PUT /api/users/{id} - Update user details.
+    • DELETE /api/users/{id} - Delete a user.
