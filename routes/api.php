@@ -69,6 +69,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'enforce.json', 'auth:sanctum
     Route::post('loan/getLoanHistory', [etzController::class, 'getLoanHistory']);
     Route::post('loan/createRepayment', [etzTxnController::class, 'createRepayment']);
     Route::post('loan/repay', [etzController::class, 'createRepaymentNew']);
+
+    //remita endpoints
+
 });
 
 Route::group(['prefix' => 'cs'], function () {
