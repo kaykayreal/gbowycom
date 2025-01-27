@@ -170,4 +170,65 @@ class RemitaController extends Controller
             }
         }
     }
+
+    public function LoanDisbursementNotification(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customerId' => 'required|string|max:20',
+            'authorisationCode' => 'required|string',
+            'authorisationChannel' => 'required|string', // Add other channels if necessary
+            'phoneNumber' => 'required|string|digits:11',
+            'accountNumber' => 'required|string|max:15',
+            'currency' => 'required|string|size:3', // Assuming currency code is 3 letters like 'NGN'
+            'loanAmount' => 'required|numeric|min:1',
+            'collectionAmount' => 'required|numeric|min:1',
+            'dateOfDisbursement' => 'required|date_format:d-m-Y H:i:sO', // Adjust format as needed
+            'dateOfCollection' => 'required|date_format:d-m-Y H:i:sO',
+            'totalCollectionAmount' => 'required|numeric|min:1',
+            'numberOfRepayments' => 'required|integer|min:1',
+            'bankCode' => 'required|string|max:3', // Assuming bank code is 3 digits
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $header = $this->getRemitaRequestHeaders();
+        $inflight = $header['inflight'];
+        unset($header['inflight']);
+
+        $infReq = [
+            'customerId' => $request->customerId,
+            'authorisationCode' => $request->authorisationCode,
+            'authorisationChannel' => $request->authorisationChannel,
+            'phoneNumber' => $request->phoneNumber,
+            'accountNumber' => $request->accountNumber,
+            'currency' => $request->currency,
+            'loanAmount' => $request->loanAmount,
+            'collectionAmount' => $request->collectionAmount,
+            'dateOfDisbursement' => $request->dateOfDisbursement,
+            'dateOfCollection' => $request->dateOfCollection,
+            'totalCollectionAmount' => $request->totalCollectionAmount,
+            'numberOfRepayments' => $request->numberOfRepayments,
+            'bankCode' => $request->bankCode
+        ];
+
+        try {
+            $response = json_decode(Http::withHeaders($header)->timeout(180)->post($inflight, json_encode($infReq)));
+            //  $req->save();
+            $inflightResponse = json_encode($response);
+            Log::info("inflight Response : " . $inflightResponse);
+        } catch (RequestException $e) {
+            Log::error('HTTP request failed: ' . $e->getMessage());
+            return response()->json(['error' => 'HTTP request failed'], 500);
+        } catch (\Exception $e) {
+            $err = $e->getMessage();
+            Log::error('An unexpected error occurred: ' . $e->getMessage());
+            return response()->json(['error' => "$err"], 500);
+        }
+        //log in the response in teh database 
+        //implement necessary commercial services if necessary
+        return $response;
+    }
 }
