@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Client\RequestException;
-
+use Symfony\Component\Routing\RequestContext;
 
 class RemitaController extends Controller
 {
@@ -113,9 +113,7 @@ class RemitaController extends Controller
                 }
             }
 
-            Log::channel('http')->info('HTTP Response:', ['response' => $response]);
-            Log::channel('http')->info(json_encode($requestHeader));
-            Log::channel('http')->info(json_encode($customerDetail));
+            Log::info('HTTP Response:', ['response' => $response]);
 
             // Additional logic here...
 
@@ -137,7 +135,6 @@ class RemitaController extends Controller
 
                 // implement relevant charges here 
                 //by logging the transaction and calling the wallet service system 
-
 
                 //check if customer is suspended or customer not found 
                 switch ($response->responseMsg) {
@@ -230,5 +227,91 @@ class RemitaController extends Controller
         //log in the response in teh database 
         //implement necessary commercial services if necessary
         return $response;
+    }
+
+    //this function is to help stop a loan/mandate
+    //need to confirm its working with remita
+
+    public function stopLoanColection(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'authorisationCode' => 'required|string|max:10',
+            'customerId' => 'required|string|max:20',
+            'mandateReference' => 'required|string|max:15', // Adjust the max length as needed
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $header = $this->getRemitaRequestHeaders();
+        $inflight = $header['sm'];
+
+        $smParam = [
+            'authorisationCode' => $request->authorisationCode,
+            'customerId' => $request->customerId,
+            'mandateReference' => $request->mandateReference,
+        ];
+        try {
+            $response = json_decode(Http::withHeaders($header)->timeout(180)->post($inflight, json_encode($smParam)));
+            //  $req->save();
+            $smResponse = json_encode($response);
+            Log::info("Stop Mandate Response : " . $smResponse);
+        } catch (RequestException $e) {
+            Log::error('HTTP request failed: ' . $e->getMessage());
+            return response()->json(['error' => 'HTTP request failed'], 500);
+        } catch (\Exception $e) {
+            $err = $e->getMessage();
+            Log::error('An unexpected error occurred: ' . $e->getMessage());
+            return response()->json(['error' => "$err"], 500);
+        }
+        //log in the response in teh database 
+        //implement necessary commercial services if necessary
+        return $smResponse;
+    }
+
+    // this fucntion 
+
+    public function paymentHistory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'authorisationCode' => 'required|string|max:10',
+            'customerId' => 'required|string|max:20',
+            'mandateRef' => 'required|string|max:15', // Adjust the max length if necessary
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $header = $this->getRemitaRequestHeaders();
+        $phParam = [
+            'authorisationCode' => $request->authorisationCode,
+            'customerId' => $request->customerId,
+            'mandateReference' => $request->mandateRef,
+        ];
+        $phUrl = 'https://login.remita.net/remita/exapp/api/v1/send/api/loansvc/data/api/v2/payday/payment/history';
+
+
+        try {
+            $response = json_decode(Http::withHeaders($header)->timeout(180)->post($phUrl, json_encode($phParam)));
+            //  $req->save();
+            $phResponse = json_encode($response);
+            Log::info("Payment History Response : " . $phResponse);
+        } catch (RequestException $e) {
+            Log::error('HTTP request failed: ' . $e->getMessage());
+            return response()->json(['error' => 'HTTP request failed'], 500);
+        } catch (\Exception $e) {
+            $err = $e->getMessage();
+            Log::error('An unexpected error occurred: ' . $e->getMessage());
+            return response()->json(['error' => "$err"], 500);
+        }
+
+        //log in the response in teh database 
+        //implement necessary commercial services if necessary
+        return $phResponse;
     }
 }
