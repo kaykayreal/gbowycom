@@ -79,7 +79,8 @@ Route::group(['prefix' => 'cs'], function () {
     Route::post('/lookupStartimes', [creditSwitchController::class, 'cableStartimes']);
     Route::post('/validateMultichoice', [creditSwitchController::class, 'validateMultiChoiceCustomer']);
     Route::post('/Requery', [creditSwitchController::class, 'txnRequery']);
-    //Route::post('/Requery', [testController::class, 'webhk']);
+    Route::post('/getBalance', [creditSwitchController::class, 'getBalance']);
+    Route::post('/getInsurancePackages', [creditSwitchController::class, 'getInsurancePackages']);
 });
 
 Route::group(['prefix' => 'cp'], function () {
