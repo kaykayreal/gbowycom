@@ -81,6 +81,7 @@ Route::group(['prefix' => 'cs'], function () {
     Route::post('/Requery', [creditSwitchController::class, 'txnRequery']);
     Route::post('/getBalance', [creditSwitchController::class, 'getBalance']);
     Route::post('/getInsurancePackages', [creditSwitchController::class, 'getInsurancePackages']);
+    Route::post('/processInsurancePackages', [creditSwitchController::class, 'processInsurancePackages']);
 });
 
 Route::group(['prefix' => 'cp'], function () {
@@ -94,6 +95,7 @@ Route::group(['prefix' => 'tests'], function () {
     Route::post('/encrypt', [testController::class, 'encrypt']);
     Route::post('/decrypt', [testController::class, 'decrypt']);
     Route::get('/getsalary', [testController::class, 'getSalaryInfo']);
+    Route::post('/getSalaryInfo', [testController::class, 'getSalaryInformation']);
     Route::post('/lookup', [testController::class, 'lkup']);
     //creditswitch
     Route::post('/csairtime', [creditSwitchController::class, 'vendAirtime']);
